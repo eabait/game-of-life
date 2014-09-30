@@ -33,7 +33,7 @@ describe('Cell', function() {
         new Cell(false, []),
         new Cell(false, [])
       ]);
-      cell.alive = cell.willLive();
+      cell.setAlive(cell.willLive());
       expect(cell.isAlive()).toBe(false);
     });
 
@@ -46,7 +46,7 @@ describe('Cell', function() {
         new Cell(true, []),
         new Cell(true, [])
       ]);
-      cell.alive = cell.willLive();
+      cell.setAlive(cell.willLive());
       expect(cell.isAlive()).toBe(false);
     });
 
@@ -59,7 +59,7 @@ describe('Cell', function() {
         new Cell(false, []),
         new Cell(false, [])
       ]);
-      cell.alive = cell.willLive();
+      cell.setAlive(cell.willLive());
       expect(cell.isAlive()).toBe(true);
     });
 
@@ -72,7 +72,7 @@ describe('Cell', function() {
         new Cell(false, []),
         new Cell(false, [])
       ]);
-      cell.alive = cell.willLive();
+      cell.setAlive(cell.willLive());
       expect(cell.isAlive()).toBe(true);
     });
 

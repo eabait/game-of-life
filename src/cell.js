@@ -28,17 +28,25 @@ var Cell = (function() {
   };
 
   Cell.prototype.shouldLiveByReproduction = function(aliveNeighbours) {
-    return (!this.isAlive() && aliveNeighbours === 3)
+    return (!this.isAlive() && aliveNeighbours === 3);
   };
 
   Cell.prototype.getNumberOfAliveNeighbours = function() {
     return this.neighbours.reduce(function(aliveNeighbours, neighbour) {
-      return aliveNeighbours + !!neighbour.isAlive();
+      return aliveNeighbours + (+neighbour.isAlive());
     }, 0);
   };
 
   Cell.prototype.isAlive = function() {
     return this.alive;
+  };
+
+  /**
+   * Sets cell state as live or dead
+   * @param {boolean} live if true the cell is alive, if false is dead
+   */
+  Cell.prototype.setAlive = function(alive) {
+    this.alive = alive;
   };
 
   return Cell;

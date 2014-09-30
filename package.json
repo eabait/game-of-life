@@ -4,7 +4,7 @@
   "description": "Conway's Game of Life",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "grunt ci:dev"
   },
   "repository": {
     "type": "git",

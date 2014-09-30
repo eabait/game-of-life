@@ -37,5 +37,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
-  grunt.registerTask('default', ['jshint', 'complexity', 'jasmine']);
+  grunt.registerTask('ci:local', ['jshint', 'complexity', 'jasmine']);
+  grunt.registerTask('ci:dev', ['jshint', 'complexity', 'jasmine']);
+
+  grunt.registerTask('default', ['ci:local']);
 };

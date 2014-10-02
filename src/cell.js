@@ -80,6 +80,14 @@ var Cell = (function() {
     this.alive = alive;
   };
 
+  Cell.prototype.addNeighbour = function addNeighbour(cell) {
+    this.neighbours.push(cell);
+  };
+
+  Cell.prototype.toString = function toString() {
+    return this.isAlive();
+  };
+
   return Cell;
 
 }());

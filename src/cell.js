@@ -80,10 +80,18 @@ var Cell = (function() {
     this.alive = alive;
   };
 
+  /**
+   * Adds a cell neighbour
+   * @param {Cell} cell Neighbours of the cell
+   */
   Cell.prototype.addNeighbour = function addNeighbour(cell) {
     this.neighbours.push(cell);
   };
 
+  /**
+   * Cell's string representation
+   * @return {String} Returns a string showing wether a cell is alive or not
+   */
   Cell.prototype.toString = function toString() {
     return this.isAlive();
   };

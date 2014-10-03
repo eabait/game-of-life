@@ -6,6 +6,15 @@ var Universe = (function() {
     this.mapUniverse(initialUniverse);
   }
 
+  Universe.prototype.tick = function tick() {
+    var nextGeneration = this.currentGeneration.map(function(row) {
+      return row.map(function(cell) {
+        return new Cell(cell.willLive(), []);
+      });
+    });
+    this.mapUniverse(nextGeneration);
+  };
+
   Universe.prototype.mapUniverse = function mapUniverse(matrix) {
     this.currentGeneration = createCellUniverse(matrix);
     this.updateCellsNeighbours(this.currentGeneration);
@@ -22,13 +31,15 @@ var Universe = (function() {
   Universe.prototype.updateCellsNeighbours = function updateCellsNeighbours(matrix) {
     this.currentGeneration.forEach(function(row, rowIndex) {
       row.forEach(function(cell, colIndex) {
-        this.setCellNeighbours(cell, matrix, colIndex, rowIndex);
+        this.addCellNeighbours(cell, matrix, colIndex, rowIndex);
       }, this);
     }, this);
   };
 
   function getMovementsAndLimits(x, y, len) {
     return {
+      x: x,
+      y: y,
       up: y - 1,
       down: y + 1,
       left: x - 1,
@@ -40,47 +51,70 @@ var Universe = (function() {
     };
   }
 
-  Universe.prototype.setCellNeighbours = function setCellNeighbours(cell, matrix, x, y) {
-    var loc = getMovementsAndLimits(x, y, matrix.length);
+  Universe.prototype.addCellNeighbours = function addCellNeighbours(cell, matrix, x, y) {
+    var cellLocation = getMovementsAndLimits(x, y, matrix.length);
 
-    if (loc.canMoveLeft) {
-      cell.addNeighbour(this.getCellAt(loc.left, y));
-      if (loc.canMoveUp) {
-        cell.addNeighbour(this.getCellAt(loc.left, loc.up));
-      }
-      if (loc.canMoveDown) {
-        cell.addNeighbour(this.getCellAt(loc.left, loc.down));
-      }
+    this.addLeftNeighbour(cell, cellLocation);
+    this.addBottomLeftNeighbour(cell, cellLocation);
+    this.addTopLeftNeighbour(cell, cellLocation);
+    this.addRightNeighbour(cell, cellLocation);
+    this.addBottomRightNeighbour(cell, cellLocation);
+    this.addTopRightNeighbour(cell, cellLocation);
+    this.addTopNeighbour(cell, cellLocation);
+    this.addBottomNeighbour(cell, cellLocation);
+  };
+
+  Universe.prototype.addLeftNeighbour = function addLeftNeighbour(cell, cellLocation) {
+    if (cellLocation.canMoveLeft) {
+      cell.addNeighbour(this.getCellAt(cellLocation.left, cellLocation.y));
     }
-    if (loc.canMoveRight) {
-      cell.addNeighbour(this.getCellAt(loc.right, y));
-      if (loc.canMoveUp) {
-        cell.addNeighbour(this.getCellAt(loc.right, loc.up));
-      }
-      if (loc.canMoveDown) {
-        cell.addNeighbour(this.getCellAt(loc.right, loc.down));
-      }
+  };
+
+  Universe.prototype.addBottomLeftNeighbour = function addBottomLeftNeighbour(cell, cellLocation) {
+    if (cellLocation.canMoveLeft && cellLocation.canMoveDown) {
+      cell.addNeighbour(this.getCellAt(cellLocation.left, cellLocation.down));
     }
-    if (loc.canMoveUp) {
-      cell.addNeighbour(this.getCellAt(x, loc.up));
+  };
+
+  Universe.prototype.addTopLeftNeighbour = function addTopLeftNeighbour(cell, cellLocation) {
+    if (cellLocation.canMoveLeft && cellLocation.canMoveUp) {
+      cell.addNeighbour(this.getCellAt(cellLocation.left, cellLocation.up));
     }
-    if (loc.canMoveDown) {
-      cell.addNeighbour(this.getCellAt(x, loc.down));
+  };
+
+  Universe.prototype.addRightNeighbour = function addRightNeighbour(cell, cellLocation) {
+    if (cellLocation.canMoveRight) {
+      cell.addNeighbour(this.getCellAt(cellLocation.right, cellLocation.y));
+    }
+  };
+
+  Universe.prototype.addTopRightNeighbour = function addTopRightNeighbour(cell, cellLocation) {
+    if (cellLocation.canMoveRight && cellLocation.canMoveUp) {
+      cell.addNeighbour(this.getCellAt(cellLocation.right, cellLocation.up));
+    }
+  };
+
+  Universe.prototype.addBottomRightNeighbour = function addBottomRightNeighbour(cell, cellLocation) {
+    if (cellLocation.canMoveRight && cellLocation.canMoveDown) {
+      cell.addNeighbour(this.getCellAt(cellLocation.right, cellLocation.down));
+    }
+  };
+
+  Universe.prototype.addTopNeighbour = function addTopNeighbour(cell, cellLocation) {
+    if (cellLocation.canMoveUp) {
+      cell.addNeighbour(this.getCellAt(cellLocation.x, cellLocation.up));
+    }
+  };
+
+  Universe.prototype.addBottomNeighbour = function addBottomNeighbour(cell, cellLocation) {
+    if (cellLocation.canMoveDown) {
+      cell.addNeighbour(this.getCellAt(cellLocation.x, cellLocation.down));
     }
   };
 
   Universe.prototype.getCellAt = function getCellAt(x, y) {
     //TODO add checks
     return this.currentGeneration[y][x];
-  };
-
-  Universe.prototype.tick = function tick() {
-    var nextGeneration = this.currentGeneration.map(function(row) {
-      return row.map(function(cell) {
-        return new Cell(cell.willLive(), []);
-      });
-    });
-    this.mapUniverse(nextGeneration);
   };
 
   Universe.prototype.print = function print() {

@@ -14,18 +14,13 @@ describe('Universe', function() {
       [false, true, true, false],
       [false, true, true, false],
       [false, false, false, false]
-    ]
+    ];
   });
 
   it('should be able to initialize', function() {
     var universe = new Universe(seedUniverse);
-
-    console.log(universe.print());
-
-    universe.tick();
-
-    console.log(universe.print());
-
+    expect(universe.currentGeneration.length).toBe(seedUniverse.length);
+    expect(universe.getCellAt(0, 0)).toBeDefined();
   });
 
 });

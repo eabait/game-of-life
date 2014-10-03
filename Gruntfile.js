@@ -3,6 +3,9 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     jshint: {
+      options: {
+        jshintrc: true
+      },
       all: ['Gruntfile.js', 'src/**/*.js']
     },
 
@@ -22,7 +25,7 @@ module.exports = function(grunt) {
         options: {
           breakOnErrors: true,
           errorsOnly: false,               // show only maintainability errors
-          cyclomatic: [3, 7, 12],          // or optionally a single value, like 3
+          cyclomatic: [3, 7, 10],         // or optionally a single value, like 3
           halstead: 10,           // or optionally a single value, like 8
           maintainability: 100,
           hideComplexFunctions: false,     // only display maintainability

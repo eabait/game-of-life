@@ -9,7 +9,7 @@ var Universe = (function() {
   Universe.prototype.tick = function tick() {
     var nextGeneration = this.currentGeneration.map(function(row) {
       return row.map(function(cell) {
-        return new Cell(cell.willLive(), []);
+        return cell.willLive();
       });
     });
     this.mapUniverse(nextGeneration);
@@ -115,6 +115,18 @@ var Universe = (function() {
   Universe.prototype.getCellAt = function getCellAt(x, y) {
     //TODO add checks
     return this.currentGeneration[y][x];
+  };
+
+  Universe.prototype.isDeadGeneration = function isDeadGeneration() {
+    return this.countLivingCells() === 0;
+  };
+
+  Universe.prototype.countLivingCells = function countLivingCells() {
+    return this.currentGeneration.reduce(function(universeCount, cellsRow) {
+      return universeCount + cellsRow.reduce(function(rowCount, cell) {
+        return rowCount + (+cell.isAlive());
+      }, 0);
+    }, 0);
   };
 
   Universe.prototype.print = function print() {

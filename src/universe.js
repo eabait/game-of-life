@@ -130,12 +130,12 @@ var Universe = (function() {
   };
 
   Universe.prototype.print = function print() {
-    return this.currentGeneration.reduce(function(acum, row) {
+    return this.currentGeneration.map(function(row) {
       var rowOfCells = row.map(function(cell) {
         return cell.isAlive();
       });
-      return acum + '\n' + rowOfCells.join(' ');
-    }, '');
+      return rowOfCells.join(' ');
+    }).join('\n');
   };
 
   return Universe;

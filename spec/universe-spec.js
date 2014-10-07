@@ -15,16 +15,27 @@ describe('Universe', function() {
       toMatchUniverse: function() {
         return {
           compare: function(actual, expected) {
-            var compareUniverses = function() {
+
+            var compareUniverses = function(actual, expected) {
               return actual.reduce(function(acumMatrix, rowCells, rowIndex) {
                 return acumMatrix && rowCells.reduce(function(acumRow, cell, cellIndex) {
                   return acumRow && (cell.isAlive() == expected[rowIndex][cellIndex]);
                 }, true);
               }, true);
             };
+
+            var printMatrix = function(matrix) {
+              return matrix.reduce(function(acum, row) {
+                return acum + '\n' + row.join(', ');
+              }, '');
+            };
+
             var isMatch = compareUniverses(actual, expected);
+            var errMessage = 'Universes doesn\'t match \n Actual:   ' +
+              printMatrix(actual) + '\n Expected: ' + printMatrix(expected);
             return {
-              pass: isMatch
+              pass: isMatch,
+              message: !isMatch ? errMessage  : 'Universes match'
             };
           }
         };
@@ -106,7 +117,7 @@ describe('Universe', function() {
         [false, false, false, false, false],
         [false, false, true, false, false],
         [false, true, false, true, false],
-        [false, false, true, false, false],
+        [false, false, false, false, false],
         [false, false, false, false, false]
       ];
 
@@ -126,14 +137,30 @@ describe('Universe', function() {
         [false, false, false, false, false]
       ];
 
-      //universe = new Universe(seedUniverse);
-      //universe.tick();
+      universe = new Universe(seedUniverse);
+      universe.tick();
 
-      //expect(universe.currentGeneration).toMatchUniverse(firstGeneration);
+      expect(universe.currentGeneration).toMatchUniverse(firstGeneration);
 
-      //universe.tick();
+      universe.tick();
 
-      //expect(universe.isDeadGeneration()).toBe(true);
+      expect(universe.isDeadGeneration()).toBe(true);
+    });
+
+  });
+
+  describe('Print', function() {
+
+    it('should be able to serialize the universe as a string', function() {
+      seedUniverse = [
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+      ];
+
+      universe = new Universe(seedUniverse);
+
+      expect(universe.print()).toEqual(['false false false', 'false false false', 'false false false'].join('\n'));
     });
 
   });
